@@ -141,6 +141,12 @@ body:has(.opening[open]) { overflow: hidden; }
 }
 </style>
 <style id="envelope-design">
+#guest-name {
+  display: block;
+  margin-top: 5px;
+  color: #833c2f;
+  font-size: clamp(1rem, 4vw, 1.3rem);
+}
 .opening-card {
   width: min(100%, 510px);
   padding: clamp(21px, 5vw, 37px) clamp(18px, 5vw, 40px);
@@ -235,7 +241,8 @@ body:has(.opening[open]) { overflow: hidden; }
   <div class="envelope-flap"></div>
   <div class="seal">♥</div>
 </div>
-<p>Gia đình mời cả nhà đến mừng Bánh Mì tròn một tuổi!</p>
+<p id="guest-invitation" hidden>Trân trọng kính mời <strong id="guest-name"></strong></p>
+<p id="general-invitation">Gia đình mời cả nhà đến mừng Bánh Mì tròn một tuổi!</p>
 <time datetime="2026-11-26">Thứ Năm, 26.11.2026</time>
 <button type="button" id="open-envelope" autofocus>Mở thiệp</button>
 </div>
@@ -317,6 +324,19 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
 }
 </script>
 <script id="opening-behavior">
+const guests = new Map([
+  ['suti', 'Gia đình em Suti'],
+  ['kem', 'Gia đình em Kem'],
+  ['di-phuong', 'Gia đình dì Phương'],
+  ['bac-lam', 'Gia đình bác Lâm'],
+  ['yuiem-mi', 'Dì Yuiem Mi + người thương'],
+]);
+const guestName = guests.get(new URLSearchParams(location.search).get('moi'));
+if (guestName) {
+  document.querySelector('#guest-name').textContent = guestName;
+  document.querySelector('#guest-invitation').hidden = false;
+  document.querySelector('#general-invitation').hidden = true;
+}
 const opening = document.querySelector('#opening');
 const opener = document.querySelector('#open-envelope');
 const music = document.querySelector('#music');
